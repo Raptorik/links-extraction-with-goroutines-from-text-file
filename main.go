@@ -1,8 +1,8 @@
 package main
 
 import (
-	"collectlinks/collect"
 	"fmt"
+	"goroutines/text_reader_splitter"
 	"os"
 	"strings"
 	"sync"
@@ -22,28 +22,34 @@ func main() {
 	}
 
 	var x, y int
-	y = 2                     // number of text parts
+	y = 3                     // number of text parts
 	x = len(fileContent) / y  // length of text parts
 	m := make(map[int][]byte) // text as a map of bytes
 	for i := 0; i <= len(fileContent); {
 		if i == x*y {
-			m[i] = fileContent[i:len(fileContent)]
+			m[i] = fileContent[i:]
 			break
 		}
 		m[i] = fileContent[i : i+x]
 		i = i + x
 	}
-	c := collect.New()
+	c := text_reader_splitter.NewLinksCollect()
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		res <- c.FindLinks(string(m[n*0]))
+		res <- c.FindLinks(string(m[y*0]))
 		time.Sleep(time.Second * 2)
 	}()
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		res <- c.FindLinks(string(m[n*1]))
+		res <- c.FindLinks(string(m[y*1]))
+		time.Sleep(time.Second * 2)
+	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		res <- c.FindLinks(string(m[y*2]))
 		time.Sleep(time.Second * 2)
 	}()
 
@@ -59,7 +65,7 @@ func main() {
 	wgResult.Wait()
 
 	data := strings.Join(result, " ")
-	collect.CreateFileandWriteData("file_with_links", data)
-	collect.OpenAndPrintFileData("file_with_links")
+	text_reader_splitter.CreateFileWriteDataToFile("file_with_links", data)
+	text_reader_splitter.OpenPrintFileData("file_with_links")
 
 }

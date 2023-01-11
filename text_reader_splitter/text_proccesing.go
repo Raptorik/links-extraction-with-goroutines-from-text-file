@@ -11,7 +11,7 @@ type Collect struct {
 	_arrayOfLinks []string
 }
 
-func New() *Collect {
+func NewLinksCollect() *Collect {
 	res := &Collect{}
 	return res
 }
@@ -26,7 +26,7 @@ func (c *Collect) FindLinks(fileContent string) string {
 	return data
 }
 
-func CreateFileandWriteData(filename, data string) {
+func CreateFileWriteDataToFile(filename, data string) {
 	file, err := os.Create(filename) // creation of new file
 	if err != nil {
 		fmt.Println(err)
@@ -36,8 +36,8 @@ func CreateFileandWriteData(filename, data string) {
 	_, err = file.WriteString(data) // writing strings with links to the new file
 }
 
-func OpenAndPrintFileData(s string) {
-	contentLinks, err := os.ReadFile(s)
+func OpenPrintFileData(s string) {
+	contentLinks, err := os.ReadFile(s) // new file opening
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
