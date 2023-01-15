@@ -34,25 +34,14 @@ func main() {
 		i = i + x
 	}
 	c := text_reader_splitter.NewLinksCollect()
-	wg.Add(1)
-	go func() {
+	for i := 0; i <= 2; i++ {
+	    wg.Add(1)
+	    go func() {
 		defer wg.Done()
 		res <- c.FindLinks(string(m[y*0]))
 		time.Sleep(time.Second * 2)
-	}()
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		res <- c.FindLinks(string(m[y*1]))
-		time.Sleep(time.Second * 2)
-	}()
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		res <- c.FindLinks(string(m[y*2]))
-		time.Sleep(time.Second * 2)
-	}()
-
+	     }()
+	}
 	wgResult.Add(1)
 	go func() {
 		defer wgResult.Done()
